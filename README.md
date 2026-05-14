@@ -12,13 +12,13 @@ and **Data Analytics** — built with the most in-demand Big Data tools of 2026.
 ## 📸 Screenshots
 
 ### Kafka Producer — Live Orders Streaming
-![Kafka Producer](Screenshots/01-kafka-producer-running.png)
+![Kafka Producer](screenshots/01-kafka-producer-running.png)
 
 ### Kafka Consumer — Reading Messages in Real Time
-![Kafka Consumer](Screenshots/02-kafka-consumer-output.png)
+![Kafka Consumer](screenshots/02-kafka-consumer-output.png)
 
 ### Kafka UI — Topics Dashboard
-![Kafka UI](Screenshots/03-kafka-ui-dashboard.png)
+![Kafka UI](screenshots/03-kafka-ui-dashboard.png)
 
 Kafka Producer (Python)
 │
