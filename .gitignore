@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.pytest_cache/
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+
+# Environment variables (NEVER commit passwords or API keys)
+.env
+*.env
+secrets.yml
+secrets.yaml
+
+# Jupyter Notebooks checkpoints
+.ipynb_checkpoints/
+
+# OS generated files
+.DS_Store           # Mac
+Thumbs.db           # Windows
+desktop.ini
+
+# Docker volumes (auto-generated, no need to track)
+volumes/
+
+# IDE files
+.vscode/settings.json
+.idea/
+
+# Delta Lake and Hadoop data files (too large for GitHub)
+delta-lake/data/
+*.parquet
+*.orc
+*.avro
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
