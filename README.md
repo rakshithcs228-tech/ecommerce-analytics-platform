@@ -148,7 +148,7 @@ python verify_delta.py
 ```
 
 ### Step 6 — View Spark UI
-Open browser: **http://localhost:4040**
+Open browser: **http://localhost:4041**
 
 ---
 
