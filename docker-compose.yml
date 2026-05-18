@@ -1,9 +1,8 @@
-version: '3.8'
+
 
 services:
 
-  # ─── ZOOKEEPER ───────────────────────────────────────────────
-  # Kafka needs Zookeeper to manage the cluster
+  # ─── ZOOKEEPER ─────────────────────────────────────────────────
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
     container_name: zookeeper
@@ -15,7 +14,7 @@ services:
     networks:
       - ecommerce-network
 
-  # ─── KAFKA BROKER ─────────────────────────────────────────────
+  # ─── KAFKA ─────────────────────────────────────────────────────
   kafka:
     image: confluentinc/cp-kafka:7.5.0
     container_name: kafka
@@ -37,7 +36,6 @@ services:
       - ecommerce-network
 
   # ─── KAFKA UI ──────────────────────────────────────────────────
-  # A nice browser UI to see your Kafka topics and messages
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: kafka-ui
@@ -52,6 +50,29 @@ services:
     networks:
       - ecommerce-network
 
+  # ─── SPARK HISTORY SERVER ──────────────────────────────────────
+  # Shows completed Spark job history in browser
+  spark-ui:
+    image: apache/spark:3.4.0
+    container_name: spark-ui
+    ports:
+      - "4040:4040"    # Spark UI (active jobs)
+      - "18080:18080"  # Spark History Server (completed jobs)
+    command: >
+      /bin/bash -c "
+      /opt/spark/sbin/start-history-server.sh &&
+      tail -f /dev/null
+      "
+    environment:
+      SPARK_HISTORY_OPTS: "-Dspark.history.fs.logDirectory=/tmp/spark-events"
+    volumes:
+      - spark-events:/tmp/spark-events
+    networks:
+      - ecommerce-network
+
 networks:
   ecommerce-network:
     driver: bridge
+
+volumes:
+  spark-events:
