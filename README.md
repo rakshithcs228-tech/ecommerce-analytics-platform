@@ -153,8 +153,13 @@ python streaming_job.py
 python verify_delta.py
 ```
 
+<<<<<<< HEAD
 ### View Spark UI
 Open browser: **http://localhost:4040**
+=======
+### Step 6 — View Spark UI
+Open browser: **http://localhost:4041**
+>>>>>>> 22ff8f16fdd9d9a6f2bde8f26e420d992ad6af2e
 
 ---
 
