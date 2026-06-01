@@ -83,7 +83,16 @@ def create_spark_session():
         .config("spark.sql.shuffle.partitions", "4") \
         .config("spark.driver.memory", "2g") \
         .config("spark.ui.port", "4040") \
+        .config("spark.local.dir", "D:\\spark-tmp") \
+        .config("spark.driver.extraJavaOptions",
+                "-Djava.io.tmpdir=D:\\spark-tmp") \
         .getOrCreate()
+
+    spark.sparkContext.setLogLevel("WARN")
+    print("✅ SparkSession created successfully")
+    print(f"   Spark Version: {spark.version}")
+    print(f"   Spark UI:      http://localhost:4040")
+    return spark
 
     spark.sparkContext.setLogLevel("WARN")
     print("✅ SparkSession created successfully")

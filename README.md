@@ -6,47 +6,54 @@ and **Data Analytics** — built with the most in-demand Big Data tools of 2026.
 ---
 
 ## 🏗️ Architecture
-Python Producer (Kafka)
+Python Producer
 │
 ▼
-Apache Kafka (3 topics: orders, payments, user_events)
-│
-▼
-Apache Spark Structured Streaming
-│
-├──► Delta Lake RAW Layer      (exact copy from Kafka)
-│
-└──► Delta Lake CURATED Layer  (cleaned + enriched + partitioned)
-│
-▼
-Apache Hive External Tables  ← Phase 3 ✅
-(SQL interface on Delta Lake)
-│
-▼
-Apache Airflow DAG           ← Phase 3 ✅
-(nightly: RFM + Churn + Sales aggregations)
-│
-▼
-Analytics (PySpark RFM, Churn)  ← Phase 4
-│
-▼
-Power BI / Superset Dashboard   ← Phase 4
+Apache Kafka ──────────────────────────────────────────────
+(orders | payments | user_events)                         │
+│                                                    │
+▼                                                    │
+Apache Spark Structured Streaming                         │
+│                                                    │
+├──► Delta Lake RAW Layer                           │
+│    (exact copy from Kafka)                        │
+│                                                    │
+└──► Delta Lake CURATED Layer                       │
+(cleaned + enriched + partitioned)              │
+│                                      │
+▼                                      │
+Apache Hive 4.0                                │
+(SQL interface on Delta Lake)                   │
+│                                      │
+▼                                      │
+Apache Airflow 2.8.1                           │
+(nightly: RFM + Churn + Sales + Payments)      │
+│                                      │
+▼                                      │
+PySpark Analytics                              │
+(8 analyses + 8 charts + Excel export)         │
+│                                      │
+▼                                      │
+Apache Superset Dashboard ◄─────────────────────
+(live BI dashboard — auto-refresh 30s)
 
 ---
 
 ## 🔧 Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Data Ingestion | Apache Kafka |
-| Stream Processing | Apache Spark Structured Streaming |
-| Storage | Delta Lake (Lakehouse — Raw + Curated layers) |
-| SQL Interface | Apache Hive 4.0 + HiveServer2 |
-| Metastore | Apache Hive Metastore + PostgreSQL 13 |
-| Orchestration | Apache Airflow 2.8.1 |
-| Analytics | PySpark, Python (Pandas, Matplotlib) |
-| Visualisation | Power BI / Apache Superset |
-| Infrastructure | Docker, Docker Compose |
+| Layer | Technology | Version |
+|---|---|---|
+| Data Ingestion | Apache Kafka | 7.5.0 |
+| Stream Processing | Apache Spark Structured Streaming | 3.4.0 |
+| Storage | Delta Lake (Lakehouse) | 2.4.0 |
+| SQL Interface | Apache Hive + HiveServer2 | 4.0.0 |
+| Metastore Backend | PostgreSQL | 13 |
+| Orchestration | Apache Airflow | 2.8.1 |
+| Analytics | PySpark + Spark SQL | 3.4.0 |
+| Visualisation | Matplotlib + Seaborn | latest |
+| Excel Export | Pandas + openpyxl | latest |
+| BI Dashboard | Apache Superset | 3.0.0 |
+| Infrastructure | Docker + Docker Compose | latest |
 
 ---
 
@@ -54,11 +61,11 @@ Power BI / Superset Dashboard   ← Phase 4
 
 | Phase | Description | Status |
 |---|---|---|
-| Phase 1 | Kafka data ingestion — Producer & Consumer | ✅ Complete |
+| Phase 1 | Kafka ingestion — Producer & Consumer | ✅ Complete |
 | Phase 2 | Spark Structured Streaming + Delta Lake Lakehouse | ✅ Complete |
 | Phase 3 | Hive SQL tables + Airflow nightly pipeline | ✅ Complete |
-| Phase 4 | Analytics + Dashboard | 🔄 In Progress |
-| Phase 5 | Cloud deployment | ⏳ Upcoming |
+| Phase 4 | PySpark Analytics + Charts + Excel + Superset Dashboard | ✅ Complete |
+| Phase 5 | Cloud Deployment (AWS/Azure) | ⏳ Upcoming |
 
 ---
 
@@ -67,217 +74,250 @@ Power BI / Superset Dashboard   ← Phase 4
 ### Phase 1 — Kafka Producer: Live Orders Streaming
 ![Kafka Producer](screenshots/01-kafka-producer-running.png)
 
-### Phase 1 — Kafka Consumer: Reading Messages
+### Phase 1 — Kafka Consumer: Reading Messages in Real Time
 ![Kafka Consumer](screenshots/02-kafka-consumer-output.png)
 
 ### Phase 1 — Kafka UI: Topics Dashboard
-![Kafka UI](screenshots/04-kafka-ui-dashboard.png)
+![Kafka UI](screenshots/03-kafka-ui-dashboard.png)
 
 ### Phase 2 — Spark Streaming: Live Batch Processing
-![Spark Streaming](screenshots/05-spark-streaming-batches.png)
+![Spark Streaming](screenshots/04-spark-streaming-batches.png)
 
 ### Phase 2 — Delta Lake: Raw and Curated Folders
-![Delta Lake](screenshots/06-delta-lake-folders.png)
+![Delta Lake](screenshots/05-delta-lake-folders.png)
 
 ### Phase 2 — Spark UI: Jobs and Streaming Dashboard
-![Spark UI](screenshots/07-spark-ui-dashboard.png)
+![Spark UI](screenshots/06-spark-ui-dashboard.png)
 
 ### Phase 3 — Hive Tables: SQL on Delta Lake
-![Hive Tables](screenshots/08-hive-tables.png)
+![Hive Tables](screenshots/07-hive-tables.png)
 
-### Phase 3 — Airflow DAG: Nightly Pipeline
-![Airflow DAG](screenshots/09-airflow-dag.png)
+### Phase 3 — Airflow DAG: Pipeline Graph
+![Airflow DAG](screenshots/08-airflow-dag.png)
+
+### Phase 4 — Analytics Charts: All 8 Charts Generated
+![Charts Folder](screenshots/09-analytics-charts-folder.png)
+
+### Phase 4 — Sample Chart: Revenue and Peak Hours Analysis
+![Sample Chart](screenshots/10-analytics-chart-sample.png)
+
+### Phase 4 — Excel Report: 10-Sheet Business Report
+![Excel Report](screenshots/11-excel-report.png)
+
+### Phase 4 — Airflow DAG: All Tasks Succeeded
+![Airflow Success](screenshots/12-airflow-dag-success.png)
+
+### Phase 4 — Superset: Live Business Dashboard
+![Superset Dashboard](screenshots/13-superset-dashboard.png)
+
+### Phase 4 — Docker: All 9 Containers Running
+![All Containers](screenshots/14-all-containers-running.png)
 
 ---
 
-## 🚀 How to Run
+## 🚀 How to Run — Complete Setup
 
 ### Prerequisites
-- Docker Desktop installed and running
-- Python 3.8+
-
-### Step 1 — Start all infrastructure
 ```bash
+# Required software
+Docker Desktop    → https://www.docker.com/products/docker-desktop
+Python 3.8+       → https://www.python.org/downloads
+Java 11 or 17     → https://adoptium.net
+Git               → https://git-scm.com
+```
+
+### Step 1 — Clone and Start Infrastructure
+```bash
+git clone https://github.com/rakshithcs228-tech/ecommerce-analytics-platform.git
+cd ecommerce-analytics-platform
+
+# Build custom Airflow image (first time only — takes 3-5 minutes)
+docker compose build airflow
+
+# Start all 9 containers
 docker compose up -d
+
+# Verify all containers are running
 docker compose ps
 ```
 
-Expected containers:
-zookeeper       Up
-kafka           Up
-kafka-ui        Up
-spark           Up
-hive-postgres   Up
-hive-metastore  Up
-hiveserver2     Up
-airflow         Up
+### Step 2 — Install Python Dependencies
+```bash
+pip install kafka-python faker pyspark==3.4.0 delta-spark==2.4.0
+pip install matplotlib seaborn pandas openpyxl
+```
 
 ---
 
-## 🚀 Phase 1 — Kafka
+## 🚀 Phase 1 — Kafka Streaming
 
-### Start Producer (Terminal 1)
 ```bash
-pip install kafka-python faker
+# Terminal 1 — Start Producer
 cd kafka
 python producer.py
-```
 
-### Start Consumer (Terminal 2)
-```bash
+# Terminal 2 — Start Consumer
 cd kafka
 python consumer.py
-```
 
-### View Kafka UI
-Open browser: **http://localhost:8080**
+# View Kafka UI → http://localhost:8080
+```
 
 ---
 
 ## 🚀 Phase 2 — Spark + Delta Lake
 
-### Install packages inside Spark container
 ```bash
+# Open Spark container
 docker exec -it spark bash
-pip install pyspark==3.4.0 delta-spark==2.4.0 kafka-python faker
-```
+pip install pyspark==3.4.0 delta-spark==2.4.0 kafka-python
 
-### Run Spark Streaming
-```bash
+# Run streaming job (keep running)
 cd /opt/spark-apps
 python streaming_job.py
-```
 
-### Verify Delta Lake (after 30 seconds)
-```bash
+# Verify Delta Lake (new terminal)
+docker exec -it spark bash
+cd /opt/spark-apps
 python verify_delta.py
-```
 
-<<<<<<< HEAD
-### View Spark UI
-Open browser: **http://localhost:4040**
-=======
-### Step 6 — View Spark UI
-Open browser: **http://localhost:4041**
->>>>>>> 22ff8f16fdd9d9a6f2bde8f26e420d992ad6af2e
+# View Spark UI → http://localhost:4040
+```
 
 ---
 
 ## 🚀 Phase 3 — Hive + Airflow
 
-### Create Hive Tables
 ```bash
+# Create Hive tables
 docker exec -it hiveserver2 bash
 beeline -u jdbc:hive2://localhost:10000 -f /opt/hive-scripts/create_tables.sql
-```
 
-### Run Sample Queries
-```bash
-# Inside beeline
-beeline -u jdbc:hive2://localhost:10000
+# Run sample queries
 USE ecommerce;
-SELECT region, COUNT(*) as orders, ROUND(SUM(final_amount),2) as revenue
+SELECT region, COUNT(*) AS orders,
+       ROUND(SUM(final_amount),2) AS revenue
 FROM orders GROUP BY region ORDER BY revenue DESC;
+
+# View Airflow UI → http://localhost:8088 (admin/admin123)
+# Trigger DAG → ecommerce_nightly_pipeline → ▶ Trigger DAG
 ```
-
-### View Airflow UI
-Open browser: **http://localhost:8088**
-Username: admin
-Password: admin123
-
-Trigger the DAG manually → **ecommerce_nightly_pipeline** → ▶️
 
 ---
 
-## 📊 What the Pipeline Does
+## 🚀 Phase 4 — Analytics + Dashboard
 
-### Phase 1 — Kafka Ingestion
-- Generates realistic Indian e-commerce orders (15 products, Indian cities, rupee prices)
-- Streams payments — UPI, Credit Card, Net Banking (90% success rate)
-- Captures user events — page views, clicks, add to cart, searches
-- All linked by customer_id — simulates real user sessions
+```bash
+# Run all analytics (8 charts + Excel export)
+cd analytics
+python analytics_job.py
 
-### Phase 2 — Spark Processing
-**Cleaning:**
-- Remove null order_id, customer_id, amount
-- Filter zero and negative amounts
-- Standardise text to UPPERCASE and trim spaces
-- Round money values to 2 decimal places
+# Charts saved to: analytics/charts/
+# Excel saved to:  analytics/Ecommerce_Analytics_Report.xlsx
 
-**Enrichment:**
-- `is_high_value` — True for orders above ₹50,000
-- `value_segment` — PREMIUM / HIGH / MEDIUM / LOW
-- `order_hour` — peak time analysis
-- `order_day_of_week` — weekend vs weekday patterns
-- `processed_at` — data lineage timestamp
+# View Superset Dashboard → http://localhost:8089 (admin/admin123)
+# Connect to Hive: hive://hive@hiveserver2:10000/ecommerce
+```
 
-**Delta Lake Lakehouse:**
-- RAW layer — exact Kafka copy, source of truth
-- CURATED layer — cleaned, enriched, partitioned by date
+---
 
-### Phase 3 — Hive + Airflow
+## 📊 Key Business Insights
 
-**Hive Tables (External — pointing to Delta Lake):**
-- `orders` — partitioned by dt, STORED AS PARQUET
-- `payments` — partitioned by dt, STORED AS PARQUET
-- `user_events` — partitioned by dt, STORED AS PARQUET
+| Metric | Finding |
+|---|---|
+| Top Region | South — ₹21.8Cr revenue |
+| Biggest Segment | PREMIUM — 47% of all orders, avg ₹2.76L per order |
+| Best Payment Method | UPI — 90.35% success rate |
+| Top City | Kochi — ₹6.17Cr revenue |
+| Device Split | Almost equal — Mobile 34%, Desktop 34%, Tablet 32% |
+| Peak Hour | Orders concentrated in business hours |
+| Data Volume | 7,259 orders · 7,253 payments · 25,413 user events |
 
-**Hive Summary Tables (Managed — written by Airflow):**
-- `daily_sales_summary` — revenue, orders by region per day
-- `customer_rfm` — Recency Frequency Monetary scores
-- `churn_candidates` — customers inactive 30/60/90+ days
-- `payment_analysis` — payment method success rates
+---
 
-**Airflow DAG — runs nightly at midnight:**
-pipeline_start
-│
-compute_daily_sales
-│
-┌─────┼──────────────┐
-▼     ▼              ▼
-RFM  Churn     Payment Analysis
-│     │              │
-└─────┼──────────────┘
-▼
-pipeline_complete
+## 📊 Analytics Generated
+
+### 8 Charts
+| Chart | Analysis |
+|---|---|
+| 01_revenue_by_region | Revenue and order distribution across 5 regions |
+| 02_sales_trend | Daily revenue trend and order volume over time |
+| 03_peak_hours | Heatmap of orders by hour and day of week |
+| 04_value_segments | PREMIUM/HIGH/MEDIUM/LOW customer breakdown |
+| 05_payment_methods | Success rates and volumes per payment method |
+| 06_rfm_distribution | Customer segments — Champions to Lost Customers |
+| 07_device_breakdown | Mobile vs Desktop vs Tablet comparison |
+| 08_top_cities | Top 10 cities ranked by revenue |
+
+### 10-Sheet Excel Report
+Sheet 1:  Orders Sample (1,000 records with enriched columns)
+Sheet 2:  Revenue by Region
+Sheet 3:  Daily Sales Trend
+Sheet 4:  Payment Method Analysis
+Sheet 5:  Value Segment Distribution
+Sheet 6:  Peak Hours (24 hours × weekend/weekday)
+Sheet 7:  Top 20 Cities
+Sheet 8:  User Event Funnel
+Sheet 9:  Customer RFM Scores
+Sheet 10: Payments Sample
 
 ---
 
 ## 🗂️ Repository Structure
 ecommerce-analytics-platform/
 │
-├── docker-compose.yml       # Full infrastructure — all 8 services
+├── Dockerfile.airflow       # Custom Airflow image — Java 17 + PySpark baked in
+├── docker-compose.yml       # All 9 services — Kafka + Spark + Hive + Airflow + Superset
 ├── README.md
 ├── .gitignore
-├── screenshots/             # Portfolio screenshots
+├── screenshots/             # 14 portfolio screenshots
 │
 ├── kafka/                   # Phase 1
-│   ├── producer.py          # Generates and streams fake orders
-│   └── consumer.py          # Reads and displays messages
+│   ├── producer.py          # Streams realistic Indian e-commerce data to Kafka
+│   └── consumer.py          # Reads and displays messages with colour coding
 │
 ├── spark/                   # Phase 2
-│   ├── streaming_job.py     # Spark Structured Streaming pipeline
-│   └── verify_delta.py      # Delta Lake verification
+│   ├── streaming_job.py     # Spark Structured Streaming — 3 parallel pipelines
+│   └── verify_delta.py      # Queries Delta Lake to verify data quality
 │
 ├── hive/                    # Phase 3
-│   ├── create_tables.sql    # Creates all 7 Hive tables
-│   └── sample_queries.sql   # 10 business queries
+│   ├── create_tables.sql    # 7 Hive tables — external on Delta Lake
+│   └── sample_queries.sql   # 10 business queries for demonstration
 │
 ├── airflow/                 # Phase 3
 │   └── dags/
-│       └── ecommerce_pipeline.py  # Nightly batch DAG
+│       └── ecommerce_pipeline.py  # Nightly DAG — RFM, Churn, Sales, Payments
 │
-├── delta-lake/              # Auto-created by Spark
-│   ├── raw/                 # Exact Kafka copy
-│   ├── curated/             # Cleaned + enriched + partitioned
-│   └── summaries/           # Airflow aggregations
+├── analytics/               # Phase 4
+│   ├── analytics_job.py     # 8 PySpark analyses + chart generation + Excel export
+│   ├── charts/              # 8 PNG chart files
+│   └── Ecommerce_Analytics_Report.xlsx  # 10-sheet Excel business report
 │
-└── analytics/               # Phase 4 (coming)
+└── delta-lake/              # Auto-created by Spark — never committed to Git
+├── raw/                 # Exact Kafka copy — source of truth
+├── curated/             # Cleaned + enriched + partitioned by date
+└── summaries/           # Airflow nightly aggregations
+
+---
+
+## 🐳 Infrastructure — 9 Docker Containers
+
+| Container | Image | Port | Purpose |
+|---|---|---|---|
+| zookeeper | cp-zookeeper:7.5.0 | 2181 | Kafka coordinator |
+| kafka | cp-kafka:7.5.0 | 9092 | Message broker |
+| kafka-ui | kafka-ui:latest | 8080 | Kafka browser UI |
+| spark | apache/spark:3.4.0 | 4040 | Stream processing |
+| hive-postgres | postgres:13 | 5432 | Hive Metastore backend |
+| hive-metastore | apache/hive:4.0.0 | 9083 | Table metadata |
+| hiveserver2 | apache/hive:4.0.0 | 10000 | SQL/JDBC interface |
+| airflow | Custom Dockerfile | 8088 | Pipeline scheduler |
+| superset | apache/superset:3.0.0 | 8089 | BI dashboard |
 
 ---
 
 ## 👤 Author
 
-**Rakshith CS**
-Data Engineering Enthusiast
-[GitHub](https://github.com/rakshithcs228-tech) | [LinkedIn](https://linkedin.com/in/yourprofile)
+**Rakshith M**
+Data Engineering Portfolio Project — 2026
+[GitHub](https://github.com/rakshithcs228-tech) | [LinkedIn](https://linkedin.com/in/MRakshith)
